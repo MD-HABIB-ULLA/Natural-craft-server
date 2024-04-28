@@ -7,7 +7,7 @@ app.use(cors());
 app.use(express.json())
 
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = "mongodb+srv://NaturealCraft:5MWQGg8rpkq4yWba@cluster0.zqymdgy.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -24,6 +24,13 @@ async function run() {
         // Connect the client to the server	(optional starting in v4.7)
         await client.connect();
         const craftItemCollection = client.db("CraftItems").collection("addedCraftItems");
+        app.get('/craftItems/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await craftItemCollection.findOne(query);
+            res.send(result)
+        })
+
 
         app.get('/craftItems', async (req, res) => {
             const result = await craftItemCollection.find().toArray();
