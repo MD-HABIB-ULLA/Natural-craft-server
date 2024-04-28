@@ -24,6 +24,35 @@ async function run() {
         // Connect the client to the server	(optional starting in v4.7)
         await client.connect();
         const craftItemCollection = client.db("CraftItems").collection("addedCraftItems");
+
+        app.put('/craftItems/:id', async (req, res) => {
+            const id = req.params.id;
+            console.log(id)
+            const loadedcraftItem = req.body;
+
+            const query = { _id: new ObjectId(id) };
+            const options = { upsert: true };
+            const updatedCraftItem = {
+                $set: {
+                    image_url: loadedcraftItem.image_url,
+                    item_name: loadedcraftItem.item_name,
+                    rating: loadedcraftItem.rating,
+                    subcategory_name: loadedcraftItem.subcategory_name,
+                    customization: loadedcraftItem.customization,
+                    stock_status: loadedcraftItem.stock_status,
+                    processing_time: loadedcraftItem.processing_time,
+                    short_description: loadedcraftItem.short_description,
+                    user_email: loadedcraftItem.user_email,
+                    user_name: loadedcraftItem.user_name,
+                    price: loadedcraftItem.price,
+                }
+            }
+
+            const result = await craftItemCollection.updateOne(query, updatedCraftItem, options);
+            res.send(result)
+        })
+
+
         app.get('/craftItems/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) }
@@ -42,6 +71,13 @@ async function run() {
             console.log(craftDetails)
             const result = await craftItemCollection.insertOne(craftDetails)
             res.send(result);
+        })
+        app.delete('/craftItems/:id', async (req, res) => {
+            const id = req.params.id;
+
+            const query = { _id: new ObjectId(id) };
+            const result = await craftItemCollection.deleteOne(query);
+            res.send(result)
         })
 
         app.get('/', (req, res) => {
