@@ -4,7 +4,8 @@ const cors = require('cors');
 const port = process.env.PORT || 4000;
 
 require('dotenv').config()
- console.log(process.env.DB_PASS)
+console.log(process.env.DB_PASS)
+
 app.use(cors());
 app.use(express.json())
 
@@ -26,6 +27,7 @@ async function run() {
         // Connect the client to the server	(optional starting in v4.7)
         // await client.connect();
         const craftItemCollection = client.db("CraftItems").collection("addedCraftItems");
+        const ctagoryCollection = client.db("CraftItems").collection("subcategory_name");
 
         app.put('/craftItems/:id', async (req, res) => {
             const id = req.params.id;
@@ -65,6 +67,10 @@ async function run() {
 
         app.get('/craftItems', async (req, res) => {
             const result = await craftItemCollection.find().toArray();
+            res.send(result)
+        })
+        app.get('/subcategory_name', async (req, res) => {
+            const result = await ctagoryCollection.find().toArray();
             res.send(result)
         })
 
