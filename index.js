@@ -27,7 +27,7 @@ async function run() {
         // Connect the client to the server	(optional starting in v4.7)
         // await client.connect();
         const craftItemCollection = client.db("CraftItems").collection("addedCraftItems");
-        const ctagoryCollection = client.db("CraftItems").collection("subcategory_name");
+        const categoryCollection = client.db("CraftItems").collection("subcategory_name");
 
         app.put('/craftItems/:id', async (req, res) => {
             const id = req.params.id;
@@ -63,6 +63,14 @@ async function run() {
             const result = await craftItemCollection.findOne(query);
             res.send(result)
         })
+       
+        app.get('/category/:subcategory_name', async (req, res) => {
+            const category = req.params.subcategory_name;
+            console.log(category)
+            const query = { subcategory_name: category }
+            const result = await craftItemCollection.find(query).toArray();
+            res.send(result)
+        })
 
 
         app.get('/craftItems', async (req, res) => {
@@ -70,7 +78,7 @@ async function run() {
             res.send(result)
         })
         app.get('/subcategory_name', async (req, res) => {
-            const result = await ctagoryCollection.find().toArray();
+            const result = await categoryCollection.find().toArray();
             res.send(result)
         })
 
