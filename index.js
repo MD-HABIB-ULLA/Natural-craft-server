@@ -3,8 +3,10 @@ const app = express()
 const cors = require('cors');
 const port = process.env.PORT || 4000;
 
+
 require('dotenv').config()
 console.log(process.env.DB_PASS)
+
 
 app.use(cors());
 app.use(express.json())
@@ -63,7 +65,9 @@ async function run() {
             const result = await craftItemCollection.findOne(query);
             res.send(result)
         })
-       
+        
+
+
         app.get('/category/:subcategory_name', async (req, res) => {
             const category = req.params.subcategory_name;
             console.log(category)
