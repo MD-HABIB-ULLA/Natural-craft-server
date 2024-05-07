@@ -3,10 +3,8 @@ const app = express()
 const cors = require('cors');
 const port = process.env.PORT || 4000;
 
-
 require('dotenv').config()
 console.log(process.env.DB_PASS)
-
 
 app.use(cors());
 app.use(express.json())
@@ -65,9 +63,21 @@ async function run() {
             const result = await craftItemCollection.findOne(query);
             res.send(result)
         })
-        
-
-
+        app.get('/mycarft/:email', async (req, res) => {
+            const email = req.params.email;
+            console.log(email)
+            const query = { user_email: email }
+            const result = await craftItemCollection.find(query).toArray();
+            res.send(result)
+        })
+        app.get('/customaize/:text', async (req, res) => {
+            const email = req.params.text;
+            console.log(email)
+            const query = { customization: email }
+            console.log(query)
+            const result = await craftItemCollection.find(query).toArray();
+            res.send(result)
+        })
         app.get('/category/:subcategory_name', async (req, res) => {
             const category = req.params.subcategory_name;
             console.log(category)
